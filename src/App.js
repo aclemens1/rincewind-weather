@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Card from "./components/card"
-import { useEffect } from "react"
 import Filter from "./components/filter"
 
 function App() {
