@@ -42,14 +42,14 @@ function App() {
   }
 
   return (
-    <>
+    <form>
       <Filter placeholder="Enter your location" value={address} setValue={setAddress} />
-      <button onClick={handleClick} disabled={loading}>What's the weather today?</button>
+      <button onClick={handleClick} disabled={loading} type="submit">What's the weather today?</button>
       <br />
       {loading && <div>loading...</div>}
       {!loading && <Card weather={weather} />}
       {error && <span style={{ color: 'red' }}>{error}</span>}
-    </>
+    </form>
   )
 
 }
