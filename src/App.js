@@ -11,17 +11,17 @@ function App() {
   const getData = async (address) => {
     setLoading(true)
     fetch("https://geocode.maps.co/search?q=" + address + "&api_key=66133c6b97c68881283499kcn082424")
-    .then(response => response.json())
-    .then((data) => {
-      if (data && data.length > 0 && data[0].lat && data[0].lon) {
-        fetch("https://api.pirateweather.net/forecast/gH9MnPxi72TolKeaAv0DxZhWVmzRqSV7/" + data[0].lat + "," + data[0].lon)
-          .then((response) => response.json())
-          .then((data) => {
-            setWeather(data)
-            setLoading(false)
-          })
-      }
-    })
+      .then(response => response.json())
+      .then((data) => {
+        if (data && data.length > 0 && data[0].lat && data[0].lon) {
+          fetch("https://api.pirateweather.net/forecast/gH9MnPxi72TolKeaAv0DxZhWVmzRqSV7/" + data[0].lat + "," + data[0].lon)
+            .then((response) => response.json())
+            .then((data) => {
+              setWeather(data)
+              setLoading(false)
+            })
+        }
+      })
   }
 
   const handleClick = () => {
