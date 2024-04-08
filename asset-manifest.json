@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/rincewind-weather/static/css/main.4963aca4.css",
-    "main.js": "/rincewind-weather/static/js/main.70ae09b3.js",
+    "main.js": "/rincewind-weather/static/js/main.c18984af.js",
     "index.html": "/rincewind-weather/index.html",
     "main.4963aca4.css.map": "/rincewind-weather/static/css/main.4963aca4.css.map",
-    "main.70ae09b3.js.map": "/rincewind-weather/static/js/main.70ae09b3.js.map"
+    "main.c18984af.js.map": "/rincewind-weather/static/js/main.c18984af.js.map"
   },
   "entrypoints": [
     "static/css/main.4963aca4.css",
-    "static/js/main.70ae09b3.js"
+    "static/js/main.c18984af.js"
   ]
 }
