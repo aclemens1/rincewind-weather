@@ -1,54 +1,74 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Card from "./components/card"
-import Filter from "./components/filter"
+import Hourly from "./components/hourly"
+import Daily from "./components/daily"
 
 function App() {
 
-  const mapsCoAPIKey = "66133c6b97c68881283499kcn082424"
   const pirateWeatherAPIKey = "gH9MnPxi72TolKeaAv0DxZhWVmzRqSV7"
 
-  const [weather, setWeather] = useState(null)
-  const [address, setAddress] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [data, setData] = useState(null)
 
-  const getData = async (address) => {
+  const getLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          resolve(position.coords), (error) => {
+            reject(new Error(`${error.message}`))
+          }
+        })
+      } else {
+        reject(new Error('Geolocation is not supported by your browser.'))
+      }
+    })
+  }
+
+  const getWeatherData = (apiKey, latitude, longitude) => {
+    return new Promise((resolve, reject) => {
+      fetch(`https://api.pirateweather.net/forecast/${apiKey}/${latitude},${longitude}?units=si`)
+        .then((response) =>  {
+          if (!response.ok) {
+            reject(new Error("Failed to fetch weather data. Please try again later."))
+          }
+          return response.json()
+        })
+        .then((data) => {
+          resolve(data)
+        })
+    })
+  }
+
+  useEffect(() => {
     setLoading(true)
-    setError("")
-    fetch("https://geocode.maps.co/search?q=" + address + "&api_key=" + mapsCoAPIKey)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.length > 0 && data[0].lat && data[0].lon) {
-          fetch("https://api.pirateweather.net/forecast/" + pirateWeatherAPIKey + "/" + data[0].lat + "," + data[0].lon)
-            .then((response) =>  response.json())
-            .then((data) => {
-              setWeather(data)
-              setLoading(false)
-            }).catch(function(error) {
-              setError('Request failed: ' + error.message);
-              setLoading(false)
-            })
-        }
-      }).catch(function(error) {
-        setError('Request failed:\n\n' + error.message);
-        setLoading(false)
+    getLocation()
+      .then((coords) => {
+        getWeatherData(
+          pirateWeatherAPIKey,
+          coords.latitude,
+          coords.longitude
+        )
+        .then((data) => {
+          setData(data)
+          setLoading(false)
+        })
       })
-  }
-
-  const handleClick = () => {
-    if (address && address.length > 0) {
-      getData(address)
-    }
-  }
+  }, [])
 
   return (
     <form>
-      <Filter placeholder="Enter your location" value={address} setValue={setAddress} />
-      <button onClick={handleClick} disabled={loading} type="submit">What's the weather today?</button>
-      <br />
       {loading && <div>loading...</div>}
-      {!loading && <Card weather={weather} />}
-      {error && <span style={{ color: 'red' }}>{error}</span>}
+      {!loading && data && (
+        <>
+          <h1>Weather</h1>
+          <h2>Now</h2>
+          <Card weather={data.currently} />
+          <h2>Hourly</h2>
+          <Hourly weather={data.hourly.data} />
+          <h2>Daily</h2>
+          <Daily weather={data.daily.data} />
+        </>
+      )}
     </form>
   )
 
