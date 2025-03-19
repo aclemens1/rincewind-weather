@@ -2,7 +2,7 @@
   "name": "react.dev",
   "version": "0.0.0",
   "main": "/src/index.js",
-  "homepage": "https://github.com/aclemens1/rincewind-weather",
+  "homepage": "https://aclemens1.github.io/rincewind-weather/",
   "scripts": {
     "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",
